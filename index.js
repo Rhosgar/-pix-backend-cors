@@ -1,13 +1,21 @@
 
 const express = require("express");
-const cors = require("cors");
 const axios = require("axios");
 
 const app = express();
-app.use(cors());
 app.use(express.json());
 
+// ⚠️ Intercepta requisição OPTIONS para liberar CORS
+app.options("/api/gerar-pix", (req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  res.status(204).end();
+});
+
 app.post("/api/gerar-pix", async (req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+
   try {
     const { amount } = req.body;
 
@@ -47,4 +55,4 @@ app.post("/api/gerar-pix", async (req, res) => {
   }
 });
 
-module.exports = (req, res) => app(req, res); // ESSENCIAL PARA FUNCIONAR NA VERCEL
+module.exports = (req, res) => app(req, res);
